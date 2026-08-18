@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './style.css'
 import './hero.css'
@@ -36,6 +36,18 @@ const previewFrames = [
 
 function App() {
   const previewRailRef = useRef(null)
+  const [navFloating, setNavFloating] = useState(false)
+
+  useEffect(() => {
+    const updateNav = () => setNavFloating(window.scrollY >= window.innerHeight * 0.72)
+    updateNav()
+    window.addEventListener('scroll', updateNav, { passive: true })
+    window.addEventListener('resize', updateNav)
+    return () => {
+      window.removeEventListener('scroll', updateNav)
+      window.removeEventListener('resize', updateNav)
+    }
+  }, [])
 
   useEffect(() => {
     const rail = previewRailRef.current
@@ -76,7 +88,7 @@ function App() {
         <source src="/media/hero.mp4" type="video/mp4" />
       </video>
       <div className="hero-glow" />
-      <nav className="nav shell">
+      <nav className={`nav shell ${navFloating ? 'nav-floating' : ''}`}>
         <a className="brand" href="#top"><i />ZT<span>STUDIO</span><sup>®</sup></a>
         <div className="nav-links"><a href="#about">关于我 / ABOUT</a><a href="#work">精选作品 / WORK</a><a href="#contact">联系 / CONTACT</a></div>
         <a className="contact-link" href="#contact">START A CONVERSATION <span>↗</span></a>
