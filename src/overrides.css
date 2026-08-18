@@ -20,6 +20,13 @@
 .nav.nav-floating .nav-links{color:#f2edf9}.nav.nav-floating .contact-link{border-color:rgba(230,221,255,.46);background:rgba(255,255,255,.07)}
 @media(max-width:650px){.nav.nav-floating{top:12px;width:calc(100% - 28px);height:58px;padding:0 15px;border-radius:15px}.nav.nav-floating .brand{font-size:19px}.nav.nav-floating .contact-link{padding:9px 11px;font-size:8px}}
 
+/* Grainient background for 02 / DIRECTORY */
+.catalog{position:relative;isolation:isolate;overflow:hidden;background:#030304}
+.catalog>.shell{position:relative;z-index:1}
+.grainient-container{position:relative;width:100%;height:100%;overflow:hidden}
+.catalog-grainient{position:absolute;z-index:0;inset:0;opacity:.84;pointer-events:none}
+.catalog:after{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 42%,transparent 0 32%,rgba(3,3,4,.56) 73%,rgba(3,3,4,.93) 100%)}
+
 /* Full-screen closing page */
 .ending-page{position:relative;min-height:100svh;background:#030306;overflow:hidden}
 .ending-page img{display:block;width:100%;height:100svh;object-fit:cover;object-position:center}

@@ -7,6 +7,7 @@ import './projects.css'
 import './capabilities.css'
 import './contact.css'
 import './overrides.css'
+import Grainient from './Grainient'
 
 const projects = [
   { no: '01', kind: 'AI VISUAL', title: '活动视觉设计', desc: '将生成式工具融入视觉创作流程，探索图像、叙事与风格的协作边界。', tags: ['AI Creative', 'Visual System', 'Workflow'], tone: 'violet', href: '/project-01.html', image: '/media/previews/01.jpg' },
@@ -123,7 +124,7 @@ function App() {
       <div className="shell stats"><div><b>7<span>+</span></b><p>设计经验</p></div><div><b>4<span>+</span></b><p>项目工程跟进</p></div><div><b>5000<span>+</span></b><p>项目设计出图</p></div></div>
     </section>
 
-    <section className="work catalog" id="work"><div className="shell"><div className="catalog-heading"><div><p className="catalog-title">SELECTED PROJECTS</p><h2>项目作品</h2></div><p className="section-label">( 02 ) / DIRECTORY</p></div>
+    <section className="work catalog" id="work"><Grainient className="catalog-grainient" color1="#111900" color2="#3e5700" color3="#030304" timeSpeed={.12} colorBalance={.35} warpStrength={.8} warpFrequency={3.5} warpSpeed={.45} warpAmplitude={62} blendAngle={18} rotationAmount={160} grainAmount={.06} grainAnimated contrast={1.35} saturation={.72} zoom={.95} /><div className="shell"><div className="catalog-heading"><div><p className="catalog-title">SELECTED PROJECTS</p><h2>项目作品</h2></div><p className="section-label">( 02 ) / DIRECTORY</p></div>
       <div className="catalog-grid">{projects.map((p) => <article className={`catalog-card ${p.tone}`} key={p.no}><a className="catalog-art" href={p.href} aria-label={`进入${p.title}分类页面`}><img className="catalog-image" src={p.image} alt={`${p.title}作品预览`} /><span>{p.kind}</span></a><div className="catalog-body"><p className="catalog-no">{p.no} / SELECTED WORK</p><h3>{p.title}</h3><p className="catalog-desc">{p.desc}</p><div className="catalog-tags">{p.tags.map(tag => <span key={tag}>{tag}</span>)}</div><a href={p.href}>查看项目详情 <b>↗</b></a></div></article>)}</div></div>
     </section>
 
