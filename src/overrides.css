@@ -27,6 +27,16 @@
 .catalog-grainient{position:absolute;z-index:0;inset:0;opacity:.84;pointer-events:none}
 .catalog:after{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 42%,transparent 0 32%,rgba(3,3,4,.56) 73%,rgba(3,3,4,.93) 100%)}
 
+/* BorderGlow treatment for 03 / CAPABILITIES cards */
+.capability-card.border-glow-card{padding:0;overflow:visible;border:0;background:#0e0e0f}
+.capability-card.border-glow-card:after{display:none}
+.capability-card>.border-glow-inner{height:100%;overflow:hidden;border-radius:inherit}
+.capability-card-content{position:relative;height:100%;padding:34px 28px;overflow:hidden;border-radius:inherit;background:radial-gradient(circle at 55% 88%,rgba(173,255,0,.08),transparent 38%),#0e0e0f}
+.capability-card:hover{border-color:transparent}
+.capability-card-content:after{content:"";position:absolute;width:280px;height:280px;right:-65px;bottom:-145px;border-radius:50%;background:radial-gradient(circle,rgba(186,255,0,.2),transparent 65%);filter:blur(8px)}
+.capability-card-content h3{position:relative;z-index:1}
+.capability-card-content .capability-tags{position:absolute;z-index:1;left:28px;bottom:27px}
+
 /* Full-screen closing page */
 .ending-page{position:relative;min-height:100svh;background:#030306;overflow:hidden}
 .ending-page img{display:block;width:100%;height:100svh;object-fit:cover;object-position:center}

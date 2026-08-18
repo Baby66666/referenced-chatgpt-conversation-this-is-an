@@ -8,6 +8,7 @@ import './capabilities.css'
 import './contact.css'
 import './overrides.css'
 import Grainient from './Grainient'
+import BorderGlow from './BorderGlow'
 
 const projects = [
   { no: '01', kind: 'AI VISUAL', title: '活动视觉设计', desc: '将生成式工具融入视觉创作流程，探索图像、叙事与风格的协作边界。', tags: ['AI Creative', 'Visual System', 'Workflow'], tone: 'violet', href: '/project-01.html', image: '/media/previews/01.jpg' },
@@ -128,7 +129,7 @@ function App() {
       <div className="catalog-grid">{projects.map((p) => <article className={`catalog-card ${p.tone}`} key={p.no}><a className="catalog-art" href={p.href} aria-label={`进入${p.title}分类页面`}><img className="catalog-image" src={p.image} alt={`${p.title}作品预览`} /><span>{p.kind}</span></a><div className="catalog-body"><p className="catalog-no">{p.no} / SELECTED WORK</p><h3>{p.title}</h3><p className="catalog-desc">{p.desc}</p><div className="catalog-tags">{p.tags.map(tag => <span key={tag}>{tag}</span>)}</div><a href={p.href}>查看项目详情 <b>↗</b></a></div></article>)}</div></div>
     </section>
 
-    <section className="strength capabilities" id="capabilities"><div className="shell"><div className="capabilities-heading"><p>CORE STRENGTHS</p><h2>个人优势</h2><span className="section-label">( 03 ) / CAPABILITIES</span></div><div className="capabilities-grid">{strengths.map((item) => <article className={`capability-card ${item.size}`} key={item.title}><h3>{item.title}<b>.</b></h3><div className="capability-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div></article>)}</div></div></section>
+    <section className="strength capabilities" id="capabilities"><div className="shell"><div className="capabilities-heading"><p>CORE STRENGTHS</p><h2>个人优势</h2><span className="section-label">( 03 ) / CAPABILITIES</span></div><div className="capabilities-grid">{strengths.map((item) => <BorderGlow className={`capability-card ${item.size}`} key={item.title} edgeSensitivity={18} glowColor="82 100 66" backgroundColor="#0e0e0f" borderRadius={28} glowRadius={26} glowIntensity={.86} colors={['#baff00', '#79d7ff', '#cb78ff']}><article className="capability-card-content"><h3>{item.title}<b>.</b></h3><div className="capability-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div></article></BorderGlow>)}</div></div></section>
 
     <section className="contact contact-gallery" id="contact">
       <div className="contact-gallery-head shell"><div><p className="section-label">( 04 ) / CONTACT</p><h2>IMAGE<br /><em>PREVIEWS</em></h2></div><div className="contact-gallery-copy"><p>作品预览</p><span>SCROLL TO EXPLORE <b>→</b></span></div></div>
