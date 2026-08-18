@@ -20,14 +20,15 @@ export default function Grainient({
   colorBalance = .32, warpStrength = 1, warpFrequency = 4, warpSpeed = .55,
   warpAmplitude = 50, blendAngle = 16, blendSoftness = .06, rotationAmount = 230,
   noiseScale = 1.5, grainAmount = .075, grainScale = 2, grainAnimated = true,
-  contrast = 1.3, gamma = 1, saturation = .8, centerX = 0, centerY = 0, zoom = .9, className = ''
+  contrast = 1.3, gamma = 1, saturation = .8, centerX = 0, centerY = 0, zoom = .9,
+  maxDpr = 1.25, fps = 30, className = ''
 }) {
   const ref = useRef(null)
 
   useEffect(() => {
     const container = ref.current
     if (!container) return undefined
-    const renderer = new Renderer({ webgl: 2, alpha: true, antialias: false, dpr: Math.min(devicePixelRatio || 1, 2) })
+    const renderer = new Renderer({ webgl: 2, alpha: true, antialias: false, dpr: Math.min(devicePixelRatio || 1, maxDpr) })
     const { gl } = renderer
     const canvas = gl.canvas
     Object.assign(canvas.style, { width: '100%', height: '100%', display: 'block' })
@@ -39,13 +40,16 @@ export default function Grainient({
     const resize = () => { const box = container.getBoundingClientRect(); renderer.setSize(Math.max(1, box.width), Math.max(1, box.height)); program.uniforms.iResolution.value.set([gl.drawingBufferWidth, gl.drawingBufferHeight]) }
     const observer = new ResizeObserver(resize)
     observer.observe(container); resize()
-    let frame = 0; let visible = true; const start = performance.now()
-    const draw = (time) => { if (visible && !document.hidden) { program.uniforms.iTime.value = (time - start) * .001; renderer.render({ scene: mesh }) } frame = requestAnimationFrame(draw) }
-    const intersection = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting })
+    let frame = 0; let visible = false; let lastDraw = 0; const start = performance.now(); const frameInterval = 1000 / fps
+    const startLoop = () => { if (!frame && visible && !document.hidden) frame = requestAnimationFrame(draw) }
+    const draw = (time) => { if (!visible || document.hidden) { frame = 0; return } if (time - lastDraw >= frameInterval) { lastDraw = time; program.uniforms.iTime.value = (time - start) * .001; renderer.render({ scene: mesh }) } frame = requestAnimationFrame(draw) }
+    const intersection = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) startLoop() })
     intersection.observe(container)
-    frame = requestAnimationFrame(draw)
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); intersection.disconnect(); canvas.remove() }
-  }, [blendAngle, blendSoftness, centerX, centerY, color1, color2, color3, colorBalance, contrast, gamma, grainAmount, grainAnimated, grainScale, noiseScale, rotationAmount, saturation, timeSpeed, warpAmplitude, warpFrequency, warpSpeed, warpStrength, zoom])
+    const onVisibilityChange = () => startLoop()
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    startLoop()
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); intersection.disconnect(); document.removeEventListener('visibilitychange', onVisibilityChange); canvas.remove() }
+  }, [blendAngle, blendSoftness, centerX, centerY, color1, color2, color3, colorBalance, contrast, fps, gamma, grainAmount, grainAnimated, grainScale, maxDpr, noiseScale, rotationAmount, saturation, timeSpeed, warpAmplitude, warpFrequency, warpSpeed, warpStrength, zoom])
 
   return <div ref={ref} className={`grainient-container ${className}`.trim()} />
 }

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './style.css'
 import './hero.css'
 import './about.css'
@@ -12,8 +14,8 @@ import BorderGlow from './BorderGlow'
 
 const projects = [
   { no: '01', kind: 'AI VISUAL', title: '活动视觉设计', desc: '将生成式工具融入视觉创作流程，探索图像、叙事与风格的协作边界。', tags: ['AI Creative', 'Visual System', 'Workflow'], tone: 'violet', href: '/project-01.html', image: '/media/previews/01.jpg' },
-  { no: '02', kind: 'BRAND VISUAL', title: '礼物动效展示', desc: '从视觉策略到平面延展，建立清晰、统一且具有辨识度的品牌表达。', tags: ['Brand System', 'Art Direction', 'Graphic'], tone: 'steel', href: '/project-02.html', image: '/media/previews/02.jpg' },
-  { no: '03', kind: '3D MOTION', title: '物料设计展示', desc: '以空间、材质和节奏重构视觉感知，为内容体验注入动态张力。', tags: ['3D Design', 'Motion', 'Visual Story'], tone: 'acid', href: '/project-03.html', image: '/media/previews/03.jpg' },
+  { no: '02', kind: 'BRAND VISUAL', title: '礼物动效展示', desc: '从视觉策略到平面延展，再到动态流程、全栈工作流胜任能力。', tags: ['Brand System', 'Art Direction', 'Graphic'], tone: 'steel', href: '/project-02.html', image: '/media/previews/02.jpg' },
+  { no: '03', kind: '3D MOTION', title: '物料设计展示', desc: '以活动内容、材质和节奏重构视觉感知，为物料内容体验注入动态张力。', tags: ['3D Design', 'Motion', 'Visual Story'], tone: 'acid', href: '/project-03.html', image: '/media/previews/03.jpg' },
 ]
 
 const strengths = [
@@ -21,7 +23,7 @@ const strengths = [
   { title: '三维与动效能力', tags: ['3D Design', 'Motion Design', 'Visual Story'], size: 'tall' },
   { title: 'AI 创作能力', tags: ['AI Creative', 'Workflow', 'Visual Exploration'], size: 'wide' },
   { title: '视觉系统搭建能力', tags: ['Visual System', 'Layout', 'Templates'], size: 'standard' },
-  { title: '平面后期能力', tags: ['Retouching', 'Typography', 'Detail'], size: 'standard' },
+  { title: '动态后期能力', tags: ['Retouching', 'Typography', 'Detail'], size: 'standard' },
 ]
 
 const previewFrames = [
@@ -38,10 +40,24 @@ const previewFrames = [
 
 function App() {
   const previewRailRef = useRef(null)
+  const navFloatingRef = useRef(false)
   const [navFloating, setNavFloating] = useState(false)
+  const [loadHeroVideo, setLoadHeroVideo] = useState(false)
 
   useEffect(() => {
-    const updateNav = () => setNavFloating(window.scrollY >= window.innerHeight * 0.72)
+    if (navigator.connection?.saveData) return undefined
+    const timer = window.setTimeout(() => setLoadHeroVideo(true), 650)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    const updateNav = () => {
+      const next = window.scrollY >= window.innerHeight * 0.72
+      if (next !== navFloatingRef.current) {
+        navFloatingRef.current = next
+        setNavFloating(next)
+      }
+    }
     updateNav()
     window.addEventListener('scroll', updateNav, { passive: true })
     window.addEventListener('resize', updateNav)
@@ -52,15 +68,71 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+
+    gsap.registerPlugin(ScrollTrigger)
+    ScrollTrigger.config({ limitCallbacks: true, ignoreMobileResize: true })
+    const ctx = gsap.context(() => {
+      const heroTimeline = gsap.timeline({ defaults: { ease: 'power4.out' } })
+      document.body.classList.add('motion-opening-lock')
+      heroTimeline
+        .set('.hero-opening-wipe', { scaleY: 1, transformOrigin: 'top center' })
+        .set(['.hero-title .hero-english', '.hero-title h1 em'], { clipPath: 'inset(0 0 100% 0)', yPercent: 105, scaleX: .72, transformOrigin: 'right center' })
+        .set(['.hero-tag', '.hero-bottom', '.hero-index'], { y: 36, autoAlpha: 0 })
+        .set('.nav', { y: -38, autoAlpha: 0 })
+        .to('.hero-opening-wipe', { scaleY: 0, duration: 1.55, ease: 'power4.inOut' })
+        .to('.nav', { y: 0, autoAlpha: 1, duration: .85 }, '-=.86')
+        .to('.hero-title .hero-english', { clipPath: 'inset(0 0 0% 0)', yPercent: 0, scaleX: 1, duration: 1.2 }, '-=.45')
+        .to('.hero-title h1 em', { clipPath: 'inset(0 0 0% 0)', yPercent: 0, scaleX: 1, duration: 1.45 }, '-=.92')
+        .to(['.hero-tag', '.hero-bottom', '.hero-index'], { y: 0, autoAlpha: 1, duration: .8, stagger: .1 }, '-=.95')
+        .add(() => {
+          document.body.classList.remove('motion-opening-lock')
+          gsap.set('.hero .nav', { clearProps: 'transform,opacity' })
+        })
+
+      const reveal = (trigger, title, cards, images) => {
+        const timeline = gsap.timeline({
+          scrollTrigger: { trigger, start: 'top 72%', once: true },
+          defaults: { ease: 'power4.out' }
+        })
+        if (title) timeline.from(title, { yPercent: 112, scaleX: .78, autoAlpha: 0, transformOrigin: 'left center', duration: 1.2 })
+        if (cards) timeline.from(cards, { y: 110, clipPath: 'inset(0 0 100% 0)', autoAlpha: 0, duration: 1.15, stagger: .14 }, title ? '-=.65' : 0)
+        if (images) timeline.from(images, { scale: 1.24, duration: 1.45, stagger: .14, ease: 'power3.out' }, cards ? '<' : 0)
+        if (cards) timeline.set(cards, { clearProps: 'transform,opacity,clipPath' })
+      }
+
+      reveal('#about', '.experience-heading h2', ['.profile-card', '.about .job'], null)
+      reveal('#work', ['.catalog-title', '.catalog-heading h2'], '.catalog-card', '.catalog-image')
+      reveal('#capabilities', ['.capabilities-heading p', '.capabilities-heading h2'], '.capability-card', null)
+      reveal('#contact', ['.contact-gallery h2', '.contact-gallery-copy'], '.preview-card', '.preview-card img')
+
+      gsap.utils.toArray('.ending-page img').forEach((image) => {
+        gsap.to(image, {
+          yPercent: 8,
+          ease: 'none',
+          scrollTrigger: { trigger: image.parentElement, start: 'top bottom', end: 'bottom top', scrub: .8 }
+        })
+      })
+    })
+    return () => {
+      document.body.classList.remove('motion-opening-lock')
+      ctx.revert()
+    }
+  }, [])
+
+  useEffect(() => {
     const rail = previewRailRef.current
     if (!rail || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
 
-    let frameId
+    let frameId = 0
     let previousTime = 0
     let paused = false
+    let visible = false
     const pause = () => { paused = true }
     const resume = () => { paused = false }
+    const start = () => { if (!frameId && visible && !document.hidden) frameId = window.requestAnimationFrame(tick) }
     const tick = (time) => {
+      if (!visible || document.hidden) { frameId = 0; return }
       if (!previousTime) previousTime = time
       if (!paused && rail.scrollWidth > rail.clientWidth) {
         rail.scrollLeft += (time - previousTime) * 0.035
@@ -69,14 +141,20 @@ function App() {
       previousTime = time
       frameId = window.requestAnimationFrame(tick)
     }
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) start() }, { threshold: 0 })
+    observer.observe(rail)
+    const onVisibilityChange = () => start()
+    document.addEventListener('visibilitychange', onVisibilityChange)
 
     rail.addEventListener('mouseenter', pause)
     rail.addEventListener('mouseleave', resume)
     rail.addEventListener('focusin', pause)
     rail.addEventListener('focusout', resume)
-    frameId = window.requestAnimationFrame(tick)
+    start()
     return () => {
       window.cancelAnimationFrame(frameId)
+      observer.disconnect()
+      document.removeEventListener('visibilitychange', onVisibilityChange)
       rail.removeEventListener('mouseenter', pause)
       rail.removeEventListener('mouseleave', resume)
       rail.removeEventListener('focusin', pause)
@@ -86,14 +164,15 @@ function App() {
 
   return <main>
     <section className="hero" id="top">
-      <video className="hero-video" autoPlay muted loop playsInline poster="/media/hero-poster.png">
-        <source src="/media/hero.mp4" type="video/mp4" />
+      <video className="hero-video" autoPlay muted loop playsInline preload="none" poster="/media/hero-poster.png">
+        {loadHeroVideo && <source src="/media/hero.mp4" type="video/mp4" />}
       </video>
       <div className="hero-glow" />
+      <div className="hero-opening-wipe" aria-hidden="true" />
       <nav className={`nav shell ${navFloating ? 'nav-floating' : ''}`}>
         <a className="brand" href="#top"><i />ZT<span>STUDIO</span><sup>®</sup></a>
         <div className="nav-links"><a href="#about">关于我 / ABOUT</a><a href="#work">精选作品 / WORK</a><a href="#contact">联系 / CONTACT</a></div>
-        <a className="contact-link" href="#contact">START A CONVERSATION <span>↗</span></a>
+        <a className="contact-link" href="#ending">START A CONVERSATION <span>↗</span></a>
       </nav>
       <div className="hero-content shell">
         <div className="hero-tag"><span>01</span><p>ZHANG TONG<br />VISUAL DESIGNER</p></div>
@@ -110,10 +189,10 @@ function App() {
       <div className="shell about-topline"><span>GET TO KNOW ME BETTER</span><span>GET TO KNOW ME BETTER</span></div>
       <div className="shell about-layout">
         <aside className="profile-card">
-          <div className="profile-photo"><img className="profile-portrait" src="/media/profile.jpg" alt="张通正面照" /></div>
+          <div className="profile-photo"><div className="profile-image-frame"><img className="profile-portrait" src="/media/profile.jpg" alt="张通正面照" loading="lazy" decoding="async" /></div></div>
           <div className="profile-name"><b>张 通</b><span>DESIG<br />NER</span></div>
           <div className="profile-info"><p>学历：<b>桂林理工大学 本科</b></p><p>专业：<b>视觉传达设计</b></p><p>微信：<b>15507832467</b></p><p>技能：<b>视觉、动效、3D、AI</b></p></div>
-          <div className="profile-skills"><span>SKILLS</span><p>3D 视觉设计 / 动效设计 / 平面后期</p></div>
+          <div className="profile-skills"><span>SKILLS</span><p>3D 视觉设计 / 动效设计 / AI工作流</p></div>
         </aside>
         <div className="experience">
           <div className="experience-heading"><p className="section-label">( 01 ) / ABOUT</p><h2>About Me<span>.</span><em>Work Experience</em></h2></div>
@@ -125,8 +204,8 @@ function App() {
       <div className="shell stats"><div><b>7<span>+</span></b><p>设计经验</p></div><div><b>4<span>+</span></b><p>项目工程跟进</p></div><div><b>5000<span>+</span></b><p>项目设计出图</p></div></div>
     </section>
 
-    <section className="work catalog" id="work"><Grainient className="catalog-grainient" color1="#111900" color2="#3e5700" color3="#030304" timeSpeed={.12} colorBalance={.35} warpStrength={.8} warpFrequency={3.5} warpSpeed={.45} warpAmplitude={62} blendAngle={18} rotationAmount={160} grainAmount={.06} grainAnimated contrast={1.35} saturation={.72} zoom={.95} /><div className="shell"><div className="catalog-heading"><div><p className="catalog-title">SELECTED PROJECTS</p><h2>项目作品</h2></div><p className="section-label">( 02 ) / DIRECTORY</p></div>
-      <div className="catalog-grid">{projects.map((p) => <article className={`catalog-card ${p.tone}`} key={p.no}><a className="catalog-art" href={p.href} aria-label={`进入${p.title}分类页面`}><img className="catalog-image" src={p.image} alt={`${p.title}作品预览`} /><span>{p.kind}</span></a><div className="catalog-body"><p className="catalog-no">{p.no} / SELECTED WORK</p><h3>{p.title}</h3><p className="catalog-desc">{p.desc}</p><div className="catalog-tags">{p.tags.map(tag => <span key={tag}>{tag}</span>)}</div><a href={p.href}>查看项目详情 <b>↗</b></a></div></article>)}</div></div>
+    <section className="work catalog" id="work"><Grainient className="catalog-grainient" color1="#111900" color2="#3e5700" color3="#030304" timeSpeed={.08} colorBalance={.35} warpStrength={.8} warpFrequency={3.5} warpSpeed={.35} warpAmplitude={62} blendAngle={18} rotationAmount={160} grainAmount={.035} grainAnimated={false} contrast={1.35} saturation={.72} zoom={.95} /><div className="shell"><div className="catalog-heading"><div><p className="catalog-title">SELECTED PROJECTS</p><h2>项目作品</h2></div><p className="section-label">( 02 ) / DIRECTORY</p></div>
+      <div className="catalog-grid">{projects.map((p) => <article className={`catalog-card ${p.tone}`} key={p.no}><a className="catalog-art" href={p.href} aria-label={`进入${p.title}分类页面`}><img className="catalog-image" src={p.image} alt={`${p.title}作品预览`} loading="lazy" decoding="async" /><span>{p.kind}</span></a><div className="catalog-body"><p className="catalog-no">{p.no} / SELECTED WORK</p><h3>{p.title}</h3><p className="catalog-desc">{p.desc}</p><div className="catalog-tags">{p.tags.map(tag => <span key={tag}>{tag}</span>)}</div><a href={p.href}>查看项目详情 <b>↗</b></a></div></article>)}</div></div>
     </section>
 
     <section className="strength capabilities" id="capabilities"><div className="shell"><div className="capabilities-heading"><p>CORE STRENGTHS</p><h2>个人优势</h2><span className="section-label">( 03 ) / CAPABILITIES</span></div><div className="capabilities-grid">{strengths.map((item) => <BorderGlow className={`capability-card ${item.size}`} key={item.title} edgeSensitivity={18} glowColor="82 100 66" backgroundColor="#0e0e0f" borderRadius={28} glowRadius={26} glowIntensity={.86} colors={['#baff00', '#79d7ff', '#cb78ff']}><article className="capability-card-content"><h3>{item.title}<b>.</b></h3><div className="capability-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div></article></BorderGlow>)}</div></div></section>
@@ -134,13 +213,13 @@ function App() {
     <section className="contact contact-gallery" id="contact">
       <div className="contact-gallery-head shell"><div><p className="section-label">( 04 ) / CONTACT</p><h2>IMAGE<br /><em>PREVIEWS</em></h2></div><div className="contact-gallery-copy"><p>作品预览</p><span>SCROLL TO EXPLORE <b>→</b></span></div></div>
       <div className="preview-rail" ref={previewRailRef} onWheel={(event) => { if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) { event.currentTarget.scrollLeft += event.deltaY; event.preventDefault() } }}>
-        {previewFrames.map((frame) => <article className={`preview-card ${frame.tone}`} key={frame.no}><img src={frame.image} alt="张通作品预览画面" /><div className="preview-shade" /><div className="preview-meta"><span>{frame.no} / 09</span><p dangerouslySetInnerHTML={{ __html: frame.title }} /><small>{frame.note}</small></div></article>)}
+        {previewFrames.map((frame) => <article className={`preview-card ${frame.tone}`} key={frame.no}><img src={frame.image} alt="张通作品预览画面" loading="lazy" decoding="async" /><div className="preview-shade" /><div className="preview-meta"><span>{frame.no} / 09</span><p dangerouslySetInnerHTML={{ __html: frame.title }} /><small>{frame.note}</small></div></article>)}
       </div>
       <div className="shell gallery-footer"><a className="gallery-contact" href="#top">期待与您交流 <span>↗</span></a><div><span>© 2026 ZHANG TONG</span><span>VISUAL / AI / BRAND DESIGNER</span><a href="#top">BACK TO TOP ↑</a></div></div>
     </section>
 
-    <section className="ending-page" aria-label="作品集结尾页">
-      <img src="/media/ending.jpg" alt="张通设计作品集 2026 致谢" />
+    <section className="ending-page" id="ending" aria-label="作品集结尾页">
+      <img src="/media/ending.jpg" alt="张通设计作品集 2026 致谢" loading="lazy" decoding="async" />
       <div className="ending-copy" aria-label="2026 Thanks"><span>ZHANG TONG / PORTFOLIO</span><h2>2026<br /><em>Thanks</em></h2></div>
       <a className="ending-back" href="#top">BACK TO TOP <span>↑</span></a>
     </section>

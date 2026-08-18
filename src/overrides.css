@@ -14,9 +14,13 @@
 /* Two-line hero title */
 .hero h1 .hero-english{display:block;line-height:.91}
 
+/* GSAP cinematic motion system */
+.motion-opening-lock{overflow:hidden}.hero-opening-wipe{position:absolute;z-index:8;inset:0;background:linear-gradient(116deg,#09090c 0%,#130a27 55%,#040407 100%);pointer-events:none;will-change:transform}.hero-title .hero-english,.hero-title h1 em,.catalog-card,.capability-card,.preview-card,.profile-card,.about .job,.about .stats>div{will-change:transform,opacity,clip-path}.catalog-art,.preview-card,.profile-photo{isolation:isolate}.catalog-image,.preview-card img,.profile-portrait,.ending-page img{will-change:transform}
+@media(prefers-reduced-motion:reduce){.hero-opening-wipe{display:none}}
+
 /* Navigation becomes a frosted glass floating panel after the opening screen */
 .nav{transition:width .35s cubic-bezier(.2,.8,.2,1),height .35s cubic-bezier(.2,.8,.2,1),background .35s,border-color .35s,box-shadow .35s,transform .35s}
-.nav.nav-floating{position:fixed;z-index:30;top:18px;left:50%;width:min(1100px,calc(100% - 48px));height:68px;padding:0 22px;transform:translateX(-50%);border:1px solid rgba(218,207,255,.28);border-radius:18px;background:linear-gradient(120deg,rgba(16,10,35,.7),rgba(44,19,79,.42));box-shadow:0 14px 42px rgba(2,0,12,.42),inset 0 1px 0 rgba(255,255,255,.16);backdrop-filter:blur(18px) saturate(1.28);-webkit-backdrop-filter:blur(18px) saturate(1.28)}
+.nav.nav-floating{position:fixed;z-index:30;top:18px;left:50%;right:auto;margin:0;width:min(1100px,calc(100% - 48px));height:68px;padding:0 22px;transform:translateX(-50%);border:1px solid rgba(218,207,255,.28);border-radius:18px;background:linear-gradient(120deg,rgba(16,10,35,.7),rgba(44,19,79,.42));box-shadow:0 14px 42px rgba(2,0,12,.42),inset 0 1px 0 rgba(255,255,255,.16);backdrop-filter:blur(18px) saturate(1.28);-webkit-backdrop-filter:blur(18px) saturate(1.28)}
 .nav.nav-floating .nav-links{color:#f2edf9}.nav.nav-floating .contact-link{border-color:rgba(230,221,255,.46);background:rgba(255,255,255,.07)}
 @media(max-width:650px){.nav.nav-floating{top:12px;width:calc(100% - 28px);height:58px;padding:0 15px;border-radius:15px}.nav.nav-floating .brand{font-size:19px}.nav.nav-floating .contact-link{padding:9px 11px;font-size:8px}}
 

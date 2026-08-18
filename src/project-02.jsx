@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import './style.css'
 import './project-showcase.css'
@@ -8,6 +8,25 @@ const videos = Array.from({ length: 65 }, (_, index) => {
   const fileNumber = String(index + 2).padStart(3, '0')
   return { no: String(index + 1).padStart(2, '0'), src: `/media/project-02/${fileNumber}.mp4` }
 })
+
+function LazyPreviewVideo({ video, index, onLoadedMetadata }) {
+  const ref = useRef(null)
+  const [active, setActive] = useState(index < 3)
+
+  useEffect(() => {
+    const node = ref.current
+    if (!node || active) return undefined
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setActive(true)
+    }, { rootMargin: '360px 0px' })
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [active])
+
+  return <div className="brand-video-preview" ref={ref}>
+    {active && <video autoPlay muted loop playsInline preload="metadata" onLoadedMetadata={onLoadedMetadata}><source src={video.src} type="video/mp4" /></video>}
+  </div>
+}
 
 function BrandVisualPage() {
   const [ratios, setRatios] = useState({})
@@ -31,7 +50,7 @@ function BrandVisualPage() {
       <header className="shell brand-intro"><div><p className="section-label">( CATEGORY 02 ) / BRAND VISUAL</p><h1>品牌<br /><em>视觉</em></h1></div><div className="brand-intro-copy"><span>SELECTED VIDEO FRAMES</span><p>品牌视觉动态探索与画面呈现。</p><a href="/#contact">CONTACT <b>↗</b></a></div></header>
       <div className="shell brand-filter"><span>ALL WORKS</span><span>65 VIDEO PIECES</span><span>AUTO PLAY / LOOP</span></div>
       <div className="shell brand-video-grid">
-        {videos.map((video, index) => <button className="brand-video-card" type="button" key={video.no} style={{ '--video-ratio': ratios[video.no] || '16 / 9' }} onClick={() => setSelectedVideo(video)} aria-label={`打开品牌视觉动态作品 ${video.no}`}><video autoPlay muted loop playsInline preload={index < 6 ? 'metadata' : 'none'} onLoadedMetadata={(event) => setVideoRatio(event, video.no)}><source src={video.src} type="video/mp4" /></video><span className="brand-video-play" aria-hidden="true">VIEW ↗</span><span className="brand-video-caption"><span>{video.no} / 65</span><b>BRAND VISUAL</b></span></button>)}
+        {videos.map((video, index) => <button className="brand-video-card" type="button" key={video.no} style={{ '--video-ratio': ratios[video.no] || '16 / 9' }} onClick={() => setSelectedVideo(video)} aria-label={`打开品牌视觉动态作品 ${video.no}`}><LazyPreviewVideo video={video} index={index} onLoadedMetadata={(event) => setVideoRatio(event, video.no)} /><span className="brand-video-play" aria-hidden="true">VIEW ↗</span><span className="brand-video-caption"><span>{video.no} / 65</span><b>BRAND VISUAL</b></span></button>)}
       </div>
       <footer className="shell project-showcase-end"><span>END OF CATEGORY 02</span><a href="/#work">BACK TO SELECTED WORK ↑</a></footer>
     </section>
