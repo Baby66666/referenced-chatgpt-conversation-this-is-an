@@ -1,0 +1,16 @@
+# Dependencies and generated output
+node_modules/
+dist/
+.vite/
+*.log
+
+# Local visual and video assets: keep on disk, never include in code snapshots
+public/media/
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.mp4
+*.mov
+*.webm
