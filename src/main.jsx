@@ -13,9 +13,9 @@ import Grainient from './Grainient'
 import BorderGlow from './BorderGlow'
 
 const projects = [
-  { no: '01', kind: 'AI VISUAL', title: '活动视觉设计', desc: '将生成式工具融入视觉创作流程，探索图像、叙事与风格的协作边界。', tags: ['AI Creative', 'Visual System', 'Workflow'], tone: 'violet', href: '/project-01.html', image: '/media/previews/01.jpg' },
-  { no: '02', kind: 'BRAND VISUAL', title: '礼物动效展示', desc: '从视觉策略到平面延展，再到动态流程、全栈工作流胜任能力。', tags: ['Brand System', 'Art Direction', 'Graphic'], tone: 'steel', href: '/project-02.html', image: '/media/previews/02.jpg' },
-  { no: '03', kind: '3D MOTION', title: '物料设计展示', desc: '以活动内容、材质和节奏重构视觉感知，为物料内容体验注入动态张力。', tags: ['3D Design', 'Motion', 'Visual Story'], tone: 'acid', href: '/project-03.html', image: '/media/previews/03.jpg' },
+  { no: '01', kind: 'AI VISUAL', title: '活动视觉设计', desc: '将生成式工具融入视觉创作流程，探索图像、叙事与风格的协作边界。', tags: ['AI Creative', 'Visual System', 'Workflow'], tone: 'violet', href: '/project-01.html', image: '/media/previews/01.webp' },
+  { no: '02', kind: 'BRAND VISUAL', title: '礼物动效展示', desc: '从视觉策略到平面延展，再到动态流程、全栈工作流胜任能力。', tags: ['Brand System', 'Art Direction', 'Graphic'], tone: 'steel', href: '/project-02.html', image: '/media/previews/02.webp' },
+  { no: '03', kind: '3D MOTION', title: '物料设计展示', desc: '以活动内容、材质和节奏重构视觉感知，为物料内容体验注入动态张力。', tags: ['3D Design', 'Motion', 'Visual Story'], tone: 'acid', href: '/project-03.html', image: '/media/previews/03.webp' },
 ]
 
 const strengths = [
@@ -27,15 +27,15 @@ const strengths = [
 ]
 
 const previewFrames = [
-  { no: '01', title: 'VISUAL<br />FRAME', note: 'VISUAL DESIGN / 2026', tone: 'violet', image: '/media/catalog/01.jpg' },
-  { no: '02', title: 'MOTION<br />STUDY', note: 'MOTION / AI CREATIVE', tone: 'blue', image: '/media/catalog/02.jpg' },
-  { no: '03', title: 'BRAND<br />EXPLORATION', note: 'BRAND VISUAL', tone: 'orange', image: '/media/catalog/03.jpg' },
-  { no: '04', title: 'DESIGN<br />DETAIL', note: 'VISUAL DESIGN', tone: 'purple', image: '/media/catalog/04.jpg' },
-  { no: '05', title: 'CREATIVE<br />DIRECTION', note: 'ART DIRECTION', tone: 'mono', image: '/media/catalog/05.jpg' },
-  { no: '06', title: 'GRAPHIC<br />STUDY', note: 'GRAPHIC DESIGN', tone: 'violet', image: '/media/catalog/06.jpg' },
-  { no: '07', title: 'VISUAL<br />SYSTEM', note: 'VISUAL SYSTEM', tone: 'blue', image: '/media/catalog/07.jpg' },
-  { no: '08', title: 'BRAND<br />MOMENT', note: 'BRAND VISUAL', tone: 'orange', image: '/media/catalog/08.jpg' },
-  { no: '09', title: 'IMAGE<br />ARCHIVE', note: 'SELECTED WORK', tone: 'purple', image: '/media/catalog/09.jpg' },
+  { no: '01', title: 'VISUAL<br />FRAME', note: 'VISUAL DESIGN / 2026', tone: 'violet', image: '/media/catalog/01.webp' },
+  { no: '02', title: 'MOTION<br />STUDY', note: 'MOTION / AI CREATIVE', tone: 'blue', image: '/media/catalog/02.webp' },
+  { no: '03', title: 'BRAND<br />EXPLORATION', note: 'BRAND VISUAL', tone: 'orange', image: '/media/catalog/03.webp' },
+  { no: '04', title: 'DESIGN<br />DETAIL', note: 'VISUAL DESIGN', tone: 'purple', image: '/media/catalog/04.webp' },
+  { no: '05', title: 'CREATIVE<br />DIRECTION', note: 'ART DIRECTION', tone: 'mono', image: '/media/catalog/05.webp' },
+  { no: '06', title: 'GRAPHIC<br />STUDY', note: 'GRAPHIC DESIGN', tone: 'violet', image: '/media/catalog/06.webp' },
+  { no: '07', title: 'VISUAL<br />SYSTEM', note: 'VISUAL SYSTEM', tone: 'blue', image: '/media/catalog/07.webp' },
+  { no: '08', title: 'BRAND<br />MOMENT', note: 'BRAND VISUAL', tone: 'orange', image: '/media/catalog/08.webp' },
+  { no: '09', title: 'IMAGE<br />ARCHIVE', note: 'SELECTED WORK', tone: 'purple', image: '/media/catalog/09.webp' },
 ]
 
 function App() {
@@ -164,7 +164,7 @@ function App() {
 
   return <main>
     <section className="hero" id="top">
-      <video className="hero-video" autoPlay muted loop playsInline preload="none" poster="/media/hero-poster.png">
+      <video className="hero-video" autoPlay muted loop playsInline preload="none" poster="/media/hero-poster.webp">
         {loadHeroVideo && <source src="/media/hero.mp4" type="video/mp4" />}
       </video>
       <div className="hero-glow" />
@@ -189,7 +189,7 @@ function App() {
       <div className="shell about-topline"><span>GET TO KNOW ME BETTER</span><span>GET TO KNOW ME BETTER</span></div>
       <div className="shell about-layout">
         <aside className="profile-card">
-          <div className="profile-photo"><div className="profile-image-frame"><img className="profile-portrait" src="/media/profile.jpg" alt="张通正面照" loading="lazy" decoding="async" /></div></div>
+          <div className="profile-photo"><div className="profile-image-frame"><img className="profile-portrait" src="/media/profile.webp" alt="张通正面照" loading="lazy" decoding="async" /></div></div>
           <div className="profile-name"><b>张 通</b><span>DESIG<br />NER</span></div>
           <div className="profile-info"><p>学历：<b>桂林理工大学 本科</b></p><p>专业：<b>视觉传达设计</b></p><p>微信：<b>15507832467</b></p><p>技能：<b>视觉、动效、3D、AI</b></p></div>
           <div className="profile-skills"><span>SKILLS</span><p>3D 视觉设计 / 动效设计 / AI工作流</p></div>
@@ -219,7 +219,7 @@ function App() {
     </section>
 
     <section className="ending-page" id="ending" aria-label="作品集结尾页">
-      <img src="/media/ending.jpg" alt="张通设计作品集 2026 致谢" loading="lazy" decoding="async" />
+      <img src="/media/ending.webp" alt="张通设计作品集 2026 致谢" loading="lazy" decoding="async" />
       <div className="ending-copy" aria-label="2026 Thanks"><span>ZHANG TONG / PORTFOLIO</span><h2>2026<br /><em>Thanks</em></h2></div>
       <a className="ending-back" href="#top">BACK TO TOP <span>↑</span></a>
     </section>

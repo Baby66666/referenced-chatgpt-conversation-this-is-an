@@ -4,7 +4,7 @@ import './style.css'
 import './project-showcase.css'
 
 const projectImages = Array.from({ length: 22 }, (_, index) => ({
-  src: `/media/project-01/${index + 1}.jpg`,
+  src: `/media/project-01/${index + 1}.webp`,
   no: String(index + 1).padStart(2, '0'),
 }))
 
