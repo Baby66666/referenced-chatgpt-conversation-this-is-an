@@ -1,5 +1,5 @@
 /* Refinements requested during visual review */
-.profile-name b{border-radius:6px}
+.profile-name b{border-radius:22px}
 .catalog-art{display:block}
 .preview-rail{padding-bottom:0;scrollbar-width:none;scroll-behavior:auto;cursor:default}
 .preview-rail::-webkit-scrollbar{display:none}
